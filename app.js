@@ -4,10 +4,10 @@ const express = require('express');
 const mailchimp = require('@mailchimp/mailchimp_marketing');
 const app = express();
 const path = require('path');
-
+require('dotenv').config({path:'vars/.env'});
 mailchimp.setConfig({
-    apiKey: '7d8b8150bf469182e5a27a6ae06bad4a-us21',
-    server: 'us21',
+    apiKey: process.end.API_KEY,
+    server: process.env.API_SERVER,
 });
 
 app.use(express.static("public"));
@@ -27,7 +27,7 @@ app.post("/",(req,res)=>{
     var bday = [(date.getMonth()+1),date.getDate()].join('/');
     const run = async ()=>{
         try{
-        const response = await mailchimp.lists.addListMember("0fc98248db",{
+        const response = await mailchimp.lists.addListMember(process.env.LIST_ID,{
             email_address: email,
             status:'subscribed',
             merge_fields:{
